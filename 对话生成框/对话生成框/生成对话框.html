@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <!--<script src="public.js"></script>-->
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        section {
+            width: 400px;
+            padding: 10px;
+            border: solid black 1px;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .context {
+            width: 400px;
+            height: 300px;
+            border: 1px dashed #C1C1C1;
+            overflow: scroll;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        textarea {
+            width: 400px;
+            height: 100px;
+        }
+
+        button {
+            width: 100px;
+        }
+        .others_content{
+            border: 1px solid #000;
+            margin-top: 15px;
+            border-radius: 15px;
+            padding: 6px;
+            width: auto;
+        }
+
+    </style>
+    <link rel="stylesheet" href="css/css/style.css">
+</head>
+<body>
+
+<section>
+    <div class="context">
+    </div>
+    <textarea></textarea>
+    <button id="btn2">发送</button>
+</section>
+</body>
+</html>
+
+<script type="text/javascript">
+    var btn2 = document.getElementById("btn2");
+    var context = document.getElementsByClassName("context");//得到的是数组
+    var textarea = document.getElementsByTagName("textarea");//没有class名和id名，直接获取标签得到的是数组
+    var socket = new WebSocket("ws://120.77.154.118:80/webSocket/websocket");
+
+    socket.onmessage = function (ev) {
+        var data = JSON.parse(ev.data);
+        sendMessage(data);
+    };
+
+
+    btn2.onclick = function () {
+        var teVal2 = textarea[0].value;
+        socket.send(teVal2);
+        textarea[0].value = "";
+        textarea[0].focus();
+    }
+
+    function sendMessage(data) {
+        console.log(data);
+        if (data.isSelf) {
+            context[0].innerHTML +=  "<div class='others_content' style=' right: 0;position: relative '>"+  data.content +"</div><div></div>";
+        } else {
+
+
+        }
+
+    }
+
+
+</script>
